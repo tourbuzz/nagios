@@ -16,16 +16,15 @@ define command {
 
 # nrpe remote host checks
 define command {
-	command_name    check_nrpe_alive
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -t 20
-	}
+  command_name    check_nrpe_alive
+  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -t 20
+}
 
 define command {
-	command_name    check_nrpe
-	command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -t 20
-	}
+  command_name    check_nrpe
+  command_line    $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$ -t 20
+}
 
-# Notification
 define command {
   command_name    host-notify-by-email
   command_line    /usr/bin/printf "%b" "$LONGDATETIME$\n\n$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | <%=node['nagios']['server']['mail_command']%> -s "$NOTIFICATIONTYPE$ - $HOSTALIAS$ $HOSTSTATE$!" $CONTACTEMAIL$
@@ -36,10 +35,34 @@ define command {
   command_line    /usr/bin/printf "%b" "$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$" | <%=node['nagios']['server']['mail_command']%> -s "$HOSTALIAS$ $HOSTSTATE$!" $CONTACTPAGER$
 }
 
-# 'notify-by-email' command definition
+define command {
+  command_name    host-notify-by-sms
+  command_line    /var/lib/nagios/send_sms.sh "$CONTACTPAGER$" "$HOSTALIAS$ $HOSTSTATE$!"
+}
+
+define command {
+  command_name    host-notify-by-hipchat
+  command_line    /var/lib/nagios/send_hipchat.sh short-host "$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$"
+}
+
 define command {
   command_name    service-notify-by-email
   command_line    /usr/bin/printf "%b" "$LONGDATETIME$ - $SERVICEDESC$ $SERVICESTATE$\n\n$HOSTALIAS$  $NOTIFICATIONTYPE$\n\n$SERVICEOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | <%=node['nagios']['server']['mail_command']%> -s "** $NOTIFICATIONTYPE$ - $HOSTALIAS$ - $SERVICEDESC$ - $SERVICESTATE$" $CONTACTEMAIL$
+}
+
+define command {
+  command_name    service-notify-by-sms-email
+  command_line    /usr/bin/printf "%b" "$SERVICEOUTPUT$" | <%=node['nagios']['server']['mail_command']%> -s "$HOSTALIAS$ $SERVICEDESC$" $CONTACTPAGER$
+}
+
+define command {
+  command_name    service-notify-by-sms
+  command_line    /var/lib/nagios/send_sms.sh "$CONTACTPAGER$" "$HOSTALIAS$ $SERVICEDESC$ - $SERVICEOUTPUT$"
+}
+
+define command {
+  command_name    service-notify-by-hipchat
+  command_line    /var/lib/nagios/send_hipchat.sh short-service "$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$"
 }
 
 # Commands added through nagios_services data bags

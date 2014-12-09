@@ -8,10 +8,8 @@ define contact {
   host_notification_period        24x7
   service_notification_options    w,u,c,r,f,s
   host_notification_options       d,u,r,f,s
-#  service_notification_commands   service-notify-by-email, service-notify-by-jabber
-  service_notification_commands   service-notify-by-email
-#  host_notification_commands      host-notify-by-email, host-notify-by-sms-gateway, host-notify-by-jabber
-  host_notification_commands      host-notify-by-email
+  service_notification_commands   service-notify-by-sms
+  host_notification_commands      host-notify-by-sms
   register                        0
 }
 
@@ -21,8 +19,19 @@ define contact {
   host_notification_period        24x7
   service_notification_options    w,u,c,r,f,s
   host_notification_options       d,u,r,f,s
-  service_notification_commands   service-notify-by-sms-gateway
-  host_notification_commands      host-notify-by-sms-gateway
+  service_notification_commands   service-notify-by-sms
+  host_notification_commands      host-notify-by-sms
+  register                        0
+}
+
+define contact {
+  name                            hipchat-contact
+  service_notification_period     24x7
+  host_notification_period        24x7
+  service_notification_options    w,u,c,r,f,s
+  host_notification_options       d,u,r,f,s
+  service_notification_commands   service-notify-by-hipchat
+  host_notification_commands      host-notify-by-hipchat
   register                        0
 }
 

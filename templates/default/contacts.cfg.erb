@@ -33,6 +33,7 @@ define contact {
   use          default-contact
   contact_name <%= a['id'] %>
   email        <%= a['nagios']['email'] %>
+  pager        <%= a['nagios']['pager'] %>
 }
 <% end -%>
 
