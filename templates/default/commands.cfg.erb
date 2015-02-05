@@ -26,6 +26,11 @@ define command {
 }
 
 define command {
+	command_name    host-notify-by-slack
+	command_line    /var/lib/nagios/slack_nagios.pl -field slack_channel=#devops -field HOSTALIAS="$HOSTNAME$" -field HOSTSTATE="$HOSTSTATE$" -field HOSTOUTPUT="$HOSTOUTPUT$" -field NOTIFICATIONTYPE="$NOTIFICATIONTYPE$"
+}
+
+define command {
   command_name    host-notify-by-email
   command_line    /usr/bin/printf "%b" "$LONGDATETIME$\n\n$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | <%=node['nagios']['server']['mail_command']%> -s "$NOTIFICATIONTYPE$ - $HOSTALIAS$ $HOSTSTATE$!" $CONTACTEMAIL$
 }
@@ -43,6 +48,11 @@ define command {
 define command {
   command_name    host-notify-by-hipchat
   command_line    /var/lib/nagios/send_hipchat.sh short-host "$HOSTNAME$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$HOSTSTATE$|$HOSTOUTPUT$"
+}
+
+define command {
+	command_name    service-notify-by-slack
+	command_line    /var/lib/nagios/slack_nagios.pl -field slack_channel=#devops -field HOSTALIAS="$HOSTNAME$" -field SERVICEDESC="$SERVICEDESC$" -field SERVICESTATE="$SERVICESTATE$" -field SERVICEOUTPUT="$SERVICEOUTPUT$" -field NOTIFICATIONTYPE="$NOTIFICATIONTYPE$"
 }
 
 define command {
