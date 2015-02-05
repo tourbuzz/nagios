@@ -27,7 +27,7 @@ define command {
 
 define command {
 	command_name    host-notify-by-slack
-	command_line    /var/lib/nagios/slack_nagios.pl -field slack_channel=#devops -field HOSTALIAS="$HOSTNAME$" -field HOSTSTATE="$HOSTSTATE$" -field HOSTOUTPUT="$HOSTOUTPUT$" -field NOTIFICATIONTYPE="$NOTIFICATIONTYPE$"
+  command_line    /var/lib/nagios/slack_nagios.sh > /tmp/slack_nagios.log 2>&1
 }
 
 define command {
@@ -52,7 +52,7 @@ define command {
 
 define command {
 	command_name    service-notify-by-slack
-	command_line    /var/lib/nagios/slack_nagios.pl -field slack_channel=#devops -field HOSTALIAS="$HOSTNAME$" -field SERVICEDESC="$SERVICEDESC$" -field SERVICESTATE="$SERVICESTATE$" -field SERVICEOUTPUT="$SERVICEOUTPUT$" -field NOTIFICATIONTYPE="$NOTIFICATIONTYPE$"
+  command_line    /var/lib/nagios/slack_nagios.sh > /tmp/slack_nagios.log 2>&1
 }
 
 define command {
