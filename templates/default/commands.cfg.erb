@@ -26,11 +26,6 @@ define command {
 }
 
 define command {
-	command_name    host-notify-by-slack
-  command_line    /var/lib/nagios/slack_nagios.sh > /tmp/slack_nagios.log 2>&1
-}
-
-define command {
   command_name    host-notify-by-email
   command_line    /usr/bin/printf "%b" "$LONGDATETIME$\n\n$HOSTALIAS$ $NOTIFICATIONTYPE$ $HOSTSTATE$\n\n$HOSTOUTPUT$\n\nLogin: ssh://$HOSTNAME$" | <%=node['nagios']['server']['mail_command']%> -s "$NOTIFICATIONTYPE$ - $HOSTALIAS$ $HOSTSTATE$!" $CONTACTEMAIL$
 }
@@ -51,8 +46,8 @@ define command {
 }
 
 define command {
-	command_name    service-notify-by-slack
-  command_line    /var/lib/nagios/slack_nagios.sh > /tmp/slack_nagios.log 2>&1
+	command_name    host-notify-by-slack
+  command_line    /var/lib/nagios/send_slack.sh > /tmp/slack_nagios.log 2>&1
 }
 
 define command {
@@ -73,6 +68,11 @@ define command {
 define command {
   command_name    service-notify-by-hipchat
   command_line    /var/lib/nagios/send_hipchat.sh short-service "$SERVICEDESC$|$HOSTALIAS$|$LONGDATETIME$|$NOTIFICATIONTYPE$|$HOSTADDRESS$|$SERVICESTATE$|$SERVICEOUTPUT$"
+}
+
+define command {
+	command_name    service-notify-by-slack
+  command_line    /var/lib/nagios/send_slack.sh > /tmp/slack_nagios.log 2>&1
 }
 
 # Commands added through nagios_services data bags
