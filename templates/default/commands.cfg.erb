@@ -47,7 +47,7 @@ define command {
 
 define command {
 	command_name    host-notify-by-slack
-  command_line    /var/lib/nagios/send_slack.sh > /tmp/slack_nagios.log 2>&1
+  command_line    /var/lib/nagios/send_slack.sh short-host > /tmp/slack_nagios.log 2>&1
 }
 
 define command {
@@ -72,7 +72,7 @@ define command {
 
 define command {
 	command_name    service-notify-by-slack
-  command_line    /var/lib/nagios/send_slack.sh > /tmp/slack_nagios.log 2>&1
+  command_line    /var/lib/nagios/send_slack.sh short-service > /tmp/slack_nagios.log 2>&1
 }
 
 # Commands added through nagios_services data bags
